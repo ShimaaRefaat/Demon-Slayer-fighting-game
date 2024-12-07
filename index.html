@@ -4,138 +4,149 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>Fighting Game</title>
     <style>
       * {
         box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #282c34;
+        color: aliceblue;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+      }
+
+      .game-container {
+        position: relative;
+        display: inline-block;
+        width: 90%;
+        max-width: 800px;
+        margin-bottom: 20px;
+      }
+
+      .status-container {
+        position: absolute;
+        display: flex;
+        width: 100%;
+        align-items: center;
+        padding: 20px;
+      }
+
+      .health-bar {
+        position: relative;
+        height: 20px;
+        width: 100%;
+        margin: 0 10px;
+        background-color: rgba(214, 1, 1, 0.48);
+        border-radius: 8px;
+      }
+
+      .health-bar-inner {
+        position: absolute;
+        background-color: blue;
+        top: 0;
+        bottom: 0;
+        border-radius: 8px;
+        transition: width 0.3s ease-in-out;
+      }
+
+      .timer {
+        background-color: rgba(23, 126, 90, 0.48);
+        width: 100px;
+        height: 70px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 42px;
+        font-weight: 900;
+        color: aliceblue;
+        border-radius: 25%;
+        flex-shrink: 0;
+      }
+
+      .result-display {
+        position: absolute;
+        font-size: 42px;
+        font-weight: 900;
+        color: aliceblue;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        display: none;
+        background-color: rgba(0, 0, 0, 0.8);
+        border-radius: 10px;
+      }
+
+      canvas {
+        width: 100%;
+        height: 400px;
+        border: 1px solid aliceblue;
+        display: block;
+      }
+
+      .instructions {
+        text-align: center;
+        margin-top: 10px;
+        font-size: 14px;
+        line-height: 1.6;
       }
     </style>
   </head>
 
   <body>
-    <!-- big Container -->
-    <div style="position: relative; display: inline-block">
-      <!-- small Container -->
-      <div
-        style="
-          position: absolute;
-          display: flex;
-          width: 100%;
-          align-items: center;
-          padding: 20px;
-        "
-      >
-        <!-- playerHealth -->
-        <div
-          style="
-            position: relative;
-            height: 20px;
-            width: 100%;
-            display: flex;
-            justify-content: flex-end;
-          "
-        >
-          <div
-            style="
-              background-color: rgba(214, 1, 1, 0.48);
-              height: 20px;
-              width: 100%;
-              border-radius: 8px;
-            "
-          ></div>
-          <div
-            id="playerHealth"
-            style="
-              position: absolute;
-              background-color: blue;
-              top: 0;
-              right: 0;
-              /* left: 0; */
-              bottom: 0;
-              width: 100%;
-              border-radius: 8px;
-            "
-          ></div>
+    <!-- Game Container -->
+    <div class="game-container">
+      <!-- Status Container -->
+      <div class="status-container">
+        <!-- Player Health -->
+        <div class="health-bar" aria-label="Player Health">
+          <div id="playerHealth" class="health-bar-inner" style="width: 100%"></div>
         </div>
-        <!-- Timer -->
-        <div
-          id="timer"
-          style="
-            background-color: rgba(23, 126, 90, 0.48);
-            width: 100px;
-            height: 70px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-            margin: 4px;
-            font-size: 42px;
-            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial,
-              sans-serif;
-            font-weight: 900;
-            color: aliceblue;
-            border-radius: 25%;
-          "
-        >
-          100
-        </div>
-        <!-- Enemy Health -->
 
-        <div style="position: relative; height: 20px; width: 100%">
-          <div
-            style="
-              background-color: rgba(214, 1, 1, 0.48);
-              height: 20px;
-              border-radius: 8px;
-            "
-          ></div>
-          <div
-            id="enemyHealth"
-            style="
-              position: absolute;
-              background-color: blue;
-              top: 0;
-              right: 0;
-              left: 0;
-              bottom: 0;
-              border-radius: 8px;
-            "
-          ></div>
+        <!-- Timer -->
+        <div id="timer" class="timer" aria-label="Timer">100</div>
+
+        <!-- Enemy Health -->
+        <div class="health-bar" aria-label="Enemy Health">
+          <div id="enemyHealth" class="health-bar-inner" style="width: 100%"></div>
         </div>
       </div>
-      <div
-        id="resultOfGame"
-        style="
-          position: absolute;
-          color: aliceblue;
-          margin: 4px;
-          font-size: 42px;
-          font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial,
-            sans-serif;
-          font-weight: 900;
-          color: aliceblue;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          top: 0;
-          bottom: 0;
-          left: 0;
-          right: 0;
-          display: none;
-        "
-      >
-        Tie
-      </div>
+
+      <!-- Game Result -->
+      <div id="resultOfGame" class="result-display" aria-live="polite">Tie</div>
+
+      <!-- Canvas -->
       <canvas></canvas>
     </div>
-    <div>
-      NOTE: How To Play ? <br />Player 1 : can use (q , space , e ,r ) to fight
-      && (w , a,d) to move and jump <br />Player 2 : can use (arrow-down ,
-      <b> , </b> , . , / ) && (arrow-right , arrow-left, arrow-up ) to move and
-      jump
+
+    <!-- Instructions -->
+    <div class="instructions">
+      <strong>How To Play?</strong>
+      <p>
+        <b>Player 1:</b> Use <kbd>q</kbd>, <kbd>space</kbd>, <kbd>e</kbd>, <kbd>r</kbd> to fight
+        and <kbd>w</kbd>, <kbd>a</kbd>, <kbd>d</kbd> to move and jump.
+      </p>
+      <p>
+        <b>Player 2:</b> Use <kbd>arrow-down</kbd>, <kbd>b</kbd>, <kbd>,</kbd>, <kbd>.</kbd>, <kbd>/</kbd> 
+        to fight and <kbd>arrow-right</kbd>, <kbd>arrow-left</kbd>, <kbd>arrow-up</kbd> to move and jump.
+      </p>
     </div>
+
+  
+
     <script src="./js/utls.js"></script>
-    <script src="./js/classes.js "></script>
+    <script src="./js/classes.js"></script>
     <script src="./index.js"></script>
   </body>
 </html>
